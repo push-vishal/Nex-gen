@@ -1,94 +1,243 @@
-# Next-Gen Student Learning Dashboard
+# 🚀 NexGen Learn
 
-A high-fidelity, interactive, and responsive student learning dashboard prototype. Built with Next.js App Router (React Server Components), styled using a cosmic dark-mode theme in Tailwind CSS, and animated with Framer Motion. Data is fetched in real-time from a Supabase PostgreSQL database.
+### Learn Smarter. Progress Faster.
 
----
+NexGen Learn is a modern AI-powered learning dashboard built as part of a Frontend Internship Assessment. The platform helps learners track their progress, manage courses, visualize learning analytics, and stay motivated through streaks and achievement systems.
 
-## 🚀 Key Features
+## 🌐 Live Demo
 
-*   **Bento Grid Layout:** A premium, asymmetrical grid structuring widgets cleanly across desktop, tablet, and mobile dimensions.
-*   **Zero Layout Shift (CLS):** Pre-rendered custom Suspense skeletons guarantee layout stability while fetching data.
-*   **Rich Interaction Design:** Card hover scales, glowing border transformations, and sliding active indicators powered by Framer Motion's spring-physics and layout animations.
-*   **RSC Data Fetching:** Dynamic, secure database retrieval via Next.js Server Components with direct caching disabled (`revalidate = 0`).
-*   **Fail-safe Demo Mode:** If Supabase keys are missing or invalid, the custom error boundary intercepts the error and lets you launch the dashboard in a fully interactive local **Mock Demo Mode**.
+https://nex-gen-rho.vercel.app
 
----
+## 📂 GitHub Repository
 
-## 🛠️ Tech Stack
-
-*   **Framework:** Next.js 16 (App Router)
-*   **Database:** Supabase (PostgreSQL)
-*   **Styling:** Tailwind CSS v4 (Cosmic Theme)
-*   **Animations:** Framer Motion (Spring Physics & layoutId)
-*   **Icons:** Lucide React
+https://github.com/push-vishal/Nex-gen
 
 ---
 
-## 📁 Architecture & File Structure
+# 📖 Project Overview
+
+NexGen Learn transforms the traditional learning experience into an interactive and data-driven platform.
+
+The application provides:
+
+* Personalized learning dashboard
+* Course progress tracking
+* Learning analytics
+* Achievement and streak system
+* Secure authentication
+* Responsive modern UI
+* Real-time backend integration with Supabase
+
+The goal was to create a production-ready educational platform rather than a simple dashboard prototype.
+
+---
+
+# ✨ Features
+
+## 🔐 Authentication
+
+* Secure user authentication
+* Session management
+* Protected dashboard routes
+
+## 📚 Course Management
+
+* Browse available courses
+* Track learning progress
+* Resume ongoing courses
+
+## 📊 Learning Analytics
+
+* Activity heatmaps
+* Learning consistency tracking
+* Progress visualization
+* User engagement insights
+
+## 🔥 Streak System
+
+* Daily learning streaks
+* Activity tracking
+* Motivation-based engagement
+
+## 🎨 Modern UI/UX
+
+* Futuristic dark theme
+* Glassmorphism design
+* Responsive layout
+* Smooth animations
+* Premium dashboard experience
+
+---
+
+# 🛠 Tech Stack
+
+### Frontend
+
+* Next.js 16
+* React
+* TypeScript
+* Tailwind CSS
+* Framer Motion
+
+### Backend
+
+* Supabase
+
+### Authentication
+
+* Supabase Auth
+
+### Deployment
+
+* Vercel
+
+### Database
+
+* PostgreSQL (Supabase)
+
+---
+
+# 🏗 Architecture
 
 ```text
-├── app/
-│   ├── error.tsx        # Custom Error Boundary with setup guide & Demo Mode toggle
-│   ├── globals.css      # Tailwind v4 configuration, global dark-mode styles, and glow animations
-│   ├── layout.tsx       # Root document layout, SEO headers, and fonts
-│   ├── loading.tsx      # Exact-ratio pulsing skeletons to prevent layout shift
-│   └── page.tsx         # Async Server Component: fetches live course data from Supabase
-├── components/
-│   ├── ActivityTile.tsx # Learning consistency heatmap contribution grid with hover tooltips
-│   ├── BentoGrid.tsx    # Semantic grid container with staggered layout entrance animations
-│   ├── CourseCard.tsx   # Individual course tile with spring physics hovers and animated progress bars
-│   ├── HeroTile.tsx     # Large greeting panel with interactive daily learning streak indicator
-│   └── Sidebar.tsx      # Responsive sidebar (collapses to icons on tablet; converts to bottom nav on mobile)
-├── lib/
-│   ├── supabase.ts      # Supabase client instantiation with fallback diagnostics
-│   └── types.ts         # TypeScript schema definitions for data payloads
-├── supabase_seed.sql    # Database schema creation and initial mock data insertion script
-├── .env.example         # Template environment file
-└── .env.local           # Local environment credentials (ignored from VCS)
+User
+ │
+ ▼
+Next.js Frontend
+ │
+ ▼
+Supabase Authentication
+ │
+ ▼
+PostgreSQL Database
+ │
+ ▼
+Analytics & Progress Tracking
 ```
 
 ---
 
-## ⚙️ Setup & Installation
+# 📱 Screens
 
-### 1. Clone & Install Dependencies
+### Landing Page
+
+Modern SaaS-style landing page with:
+
+* Brand introduction
+* Authentication access
+* Platform overview
+* Responsive navigation
+
+### Dashboard
+
+* Learning overview
+* Progress analytics
+* Activity heatmap
+* User profile section
+* Course tracking
+
+---
+
+# 🎯 Assessment Objectives Addressed
+
+✅ Responsive Design
+
+✅ Modern User Experience
+
+✅ Authentication System
+
+✅ State Management
+
+✅ Backend Integration
+
+✅ Production Deployment
+
+✅ Component-Based Architecture
+
+✅ Scalable Folder Structure
+
+✅ Real-world Product Design
+
+---
+
+# 🚀 Local Setup
+
+Clone the repository:
+
+```bash
+git clone https://github.com/push-vishal/Nex-gen.git
+```
+
+Navigate into the project:
+
+```bash
+cd Nex-gen
+```
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-### 2. Configure Supabase
+Create environment variables:
 
-1.  Create a free project on [Supabase](https://supabase.com).
-2.  Navigate to the **SQL Editor** in your Supabase dashboard and click **New Query**.
-3.  Paste the contents of [supabase_seed.sql](file:///C:/Users/Vishal/Desktop/Nex-Gen/supabase_seed.sql) and run it. This will create the `courses` table, configure public read policies, and insert sample data.
-4.  Copy the **Project URL** and **API Key (Anon)** from your project settings.
-
-### 3. Setup Environment Variables
-
-Rename `.env.example` to `.env.local` and enter your Supabase keys:
-
-```ini
-NEXT_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-api-key
+```env
+NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
 ```
 
-### 4. Run Locally
+Start development server:
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view your dashboard.
+Build for production:
+
+```bash
+npm run build
+```
 
 ---
 
-## 🧠 Architectural Insights
+# 📈 Future Improvements
 
-### The Server / Client Split
-*   **Server Component (`app/page.tsx`):** Acts as the data entry point. It makes a secure network fetch to Supabase on the server side, keeping database credentials protected and eliminating client-side fetch waterfalls.
-*   **Client Components (`components/*`):** Handle interactive states, custom animations, drag/hover events, and local reactive state (like clicking the learning streak to trigger animations or hovering over heatmap blocks to view SVG tooltip popovers).
+* AI Study Assistant
+* Personalized Recommendations
+* Gamification System
+* XP & Level Progression
+* Goal Tracking
+* Social Learning Features
+* Advanced Analytics Dashboard
+* Course Marketplace
 
-### Overcoming Challenges
-*   **TypeScript Incompatibility:** In Framer Motion, transition properties like `type: 'spring'` can sometimes be typed generically as `string`, conflicting with rigid union typing. Resolving this required strict TypeScript `Variants` typing annotations to lock down keyframe transition shapes.
-*   **Zero Layout Shift:** To prevent shifting when database queries resolve, we constructed exact-aspect skeleton grids in `app/loading.tsx` so the viewport remains stable throughout the loading pipeline.
+---
+
+# 👨‍💻 Developer
+
+**Vishal Ambilkar**
+
+Computer Science & Artificial Intelligence Student
+
+GitHub:
+https://github.com/push-vishal
+
+LinkedIn:
+(Add your LinkedIn profile here)
+
+---
+
+# 🙏 Acknowledgements
+
+Built as part of a Frontend Internship Assessment to demonstrate:
+
+* Frontend Engineering Skills
+* UI/UX Design Thinking
+* Backend Integration
+* Full-Stack Development Fundamentals
+* Modern Web Development Practices
+
+---
+
+⭐ If you found this project interesting, feel free to star the repository.
