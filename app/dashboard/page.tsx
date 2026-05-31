@@ -19,8 +19,8 @@ export default async function DashboardPage() {
 
   // Parallel fetch profile and course information
   const [profileRes, coursesRes] = await Promise.all([
-    supabase.from('profiles').select('*').limit(1),
-    supabase.from('courses').select('*').order('title', { ascending: true })
+    supabase.from('profiles').select('*').eq('id', user.id).single(),
+    supabase.from('courses').select('*').eq('user_id', user.id).order('title', { ascending: true })
   ]);
 
   if (profileRes.error || coursesRes.error) {
@@ -29,7 +29,7 @@ export default async function DashboardPage() {
     );
   }
 
-  const profile = profileRes.data && profileRes.data.length > 0 ? profileRes.data[0] : null;
+  const profile = profileRes.data;
   const courses = coursesRes.data;
 
   return (
