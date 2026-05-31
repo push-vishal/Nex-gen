@@ -72,7 +72,7 @@ export default function ErrorBoundary({ error, reset }: ErrorProps) {
           </header>
 
           <BentoGrid>
-            <HeroTile userName="Scholar" />
+            <HeroTile profile={null} />
             <ActivityTile />
             {mockCourses.map((course) => (
               <CourseCard key={course.id} course={course} />

@@ -5,7 +5,17 @@ import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Activity, Flame, Calendar, Clock } from 'lucide-react';
 import { ActivityDay } from '@/lib/types';
 
-export default function ActivityTile() {
+interface ActivityTileProps {
+  totalHours?: number;
+  targetPercentage?: number;
+  rankPercentage?: number;
+}
+
+export default function ActivityTile({
+  totalHours = 84.2,
+  targetPercentage = 92,
+  rankPercentage = 5,
+}: ActivityTileProps) {
   const [hoveredDay, setHoveredDay] = useState<{ day: ActivityDay; x: number; y: number } | null>(null);
 
   // Generate 24 weeks of mock activity data
@@ -180,15 +190,15 @@ export default function ActivityTile() {
       <div className="grid grid-cols-3 gap-2 border-t border-white/5 pt-4 mt-4 relative z-10">
         <div className="flex flex-col text-left">
           <span className="text-xs text-zinc-400">Total Hours</span>
-          <span className="text-base sm:text-lg font-black text-white mt-0.5">84.2h</span>
+          <span className="text-base sm:text-lg font-black text-white mt-0.5">{totalHours}h</span>
         </div>
         <div className="flex flex-col text-left">
           <span className="text-xs text-zinc-400">Weekly Target</span>
-          <span className="text-base sm:text-lg font-black text-brand-cyan mt-0.5">92%</span>
+          <span className="text-base sm:text-lg font-black text-brand-cyan mt-0.5">{targetPercentage}%</span>
         </div>
         <div className="flex flex-col text-left">
           <span className="text-xs text-zinc-400">Current Rank</span>
-          <span className="text-base sm:text-lg font-black text-brand-purple mt-0.5">Top 5%</span>
+          <span className="text-base sm:text-lg font-black text-brand-purple mt-0.5">Top {rankPercentage}%</span>
         </div>
       </div>
     </motion.article>

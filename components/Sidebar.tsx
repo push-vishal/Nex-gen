@@ -1,8 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, BookOpen, BarChart3, Settings, Compass, Sparkles } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabaseBrowser';
+import { LayoutDashboard, BookOpen, BarChart3, Settings, Compass, LogOut } from 'lucide-react';
+import Logo from './Logo';
 
 interface SidebarProps {
   onNavChange?: (tab: string) => void;
@@ -17,7 +20,35 @@ const navItems = [
 ];
 
 export default function Sidebar({ onNavChange }: SidebarProps) {
+  const router = useRouter();
+  const supabase = createClient();
+  
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [userProfile, setUserProfile] = useState<{ fullName: string; initials: string } | null>(null);
+
+  useEffect(() => {
+    async function loadUserData() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('id', user.id)
+          .single();
+
+        const name = profile?.full_name || user.user_metadata?.full_name || 'Scholar';
+        const initials = name
+          .split(' ')
+          .map((n: string) => n[0])
+          .join('')
+          .toUpperCase()
+          .slice(0, 2);
+
+        setUserProfile({ fullName: name, initials });
+      }
+    }
+    loadUserData();
+  }, [supabase]);
 
   const handleTabClick = (tabId: string) => {
     setActiveTab(tabId);
@@ -26,18 +57,26 @@ export default function Sidebar({ onNavChange }: SidebarProps) {
     }
   };
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/login');
+    router.refresh();
+  };
+
   return (
     <>
       {/* Sidebar for Desktop & Tablet */}
       <nav className="hidden md:flex flex-col h-[calc(100vh-2rem)] sticky top-4 left-0 bg-card-bg backdrop-blur-md border border-card-border rounded-2xl p-4 transition-all duration-300 w-20 lg:w-64 shrink-0 shadow-lg shadow-purple-950/5">
         {/* Logo Section */}
-        <div className="flex items-center gap-3 px-3 py-4 mb-6 border-b border-white/5 overflow-hidden">
-          <div className="p-2 bg-purple-600/20 text-brand-purple rounded-lg shrink-0">
-            <Sparkles size={20} className="animate-pulse" />
-          </div>
-          <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent opacity-0 lg:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-            Nex-Gen Learn
-          </span>
+        <div 
+          onClick={() => router.push('/')}
+          className="flex items-center gap-3 px-2 py-4 mb-6 border-b border-white/5 overflow-hidden cursor-pointer"
+        >
+          <Logo
+            showText={true}
+            size="sm"
+            textClassName="opacity-0 lg:opacity-100 transition-opacity duration-300 whitespace-nowrap"
+          />
         </div>
 
         {/* Navigation Items */}
@@ -73,15 +112,39 @@ export default function Sidebar({ onNavChange }: SidebarProps) {
           })}
         </ul>
 
-        {/* Profile / Status Summary */}
-        <div className="mt-auto border-t border-white/5 pt-4 flex items-center gap-3 px-2 overflow-hidden">
-          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-brand-purple to-brand-blue flex items-center justify-center font-semibold text-white text-sm shrink-0 shadow-inner">
-            JD
+        {/* Profile / Status & Logout Summary */}
+        <div className="mt-auto border-t border-white/5 pt-4 flex flex-col gap-3">
+          <div className="flex items-center justify-between gap-3 px-2 overflow-hidden w-full">
+            <div className="flex items-center gap-3 overflow-hidden">
+              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-brand-purple to-brand-blue flex items-center justify-center font-semibold text-white text-sm shrink-0 shadow-inner">
+                {userProfile?.initials || 'S'}
+              </div>
+              <div className="hidden lg:flex flex-col text-left overflow-hidden">
+                <span className="text-xs font-semibold text-white truncate">
+                  {userProfile?.fullName || 'Loading...'}
+                </span>
+                <span className="text-[10px] text-zinc-400 truncate">Student Profile</span>
+              </div>
+            </div>
+            
+            {/* Desktop Logout Button */}
+            <button
+              onClick={handleLogout}
+              title="Sign Out"
+              className="hidden lg:flex p-1.5 hover:bg-white/5 rounded-lg text-zinc-400 hover:text-white transition-colors duration-200"
+            >
+              <LogOut size={16} />
+            </button>
           </div>
-          <div className="hidden lg:flex flex-col text-left overflow-hidden">
-            <span className="text-xs font-semibold text-white truncate">John Doe</span>
-            <span className="text-[10px] text-zinc-400 truncate">Pro Learner</span>
-          </div>
+
+          {/* Collapsed Tablet Logout Button */}
+          <button
+            onClick={handleLogout}
+            title="Sign Out"
+            className="lg:hidden w-full flex items-center justify-center py-2.5 hover:bg-red-500/10 border border-transparent hover:border-red-500/25 rounded-xl text-red-400 hover:text-red-300 transition-all duration-200"
+          >
+            <LogOut size={18} />
+          </button>
         </div>
       </nav>
 
@@ -113,6 +176,14 @@ export default function Sidebar({ onNavChange }: SidebarProps) {
             </button>
           );
         })}
+        {/* Mobile LogOut Button */}
+        <button
+          onClick={handleLogout}
+          className="flex flex-col items-center justify-center py-2 px-3 rounded-xl text-zinc-400 hover:text-red-400"
+        >
+          <LogOut size={20} />
+          <span className="text-[10px] mt-1 font-medium scale-90 sm:scale-100">Log Out</span>
+        </button>
       </nav>
     </>
   );

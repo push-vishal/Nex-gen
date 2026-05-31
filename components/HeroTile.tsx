@@ -1,22 +1,33 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Flame, Award, ChevronRight } from 'lucide-react';
+import { Profile } from '@/lib/types';
 
 interface HeroTileProps {
-  userName?: string;
+  profile: Profile | null;
 }
 
-export default function HeroTile({ userName = 'John' }: HeroTileProps) {
+export default function HeroTile({ profile }: HeroTileProps) {
   const [streakCount, setStreakCount] = useState(7);
   const [showConfetti, setShowConfetti] = useState(false);
+
+  // Sync state if profile loads asynchronously
+  useEffect(() => {
+    if (profile) {
+      setStreakCount(profile.streak_days);
+    }
+  }, [profile]);
 
   const triggerStreakBonus = () => {
     setStreakCount((prev) => prev + 1);
     setShowConfetti(true);
     setTimeout(() => setShowConfetti(false), 2000);
   };
+
+  const userName = profile?.full_name ?? 'Scholar';
+  const levelTitle = profile?.level_title ?? 'Level 4 Scholar';
 
   // Entrance slide variant
   const itemVariants: Variants = {
@@ -46,7 +57,7 @@ export default function HeroTile({ userName = 'John' }: HeroTileProps) {
       <div className="relative z-10 flex-1">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-brand-purple text-xs font-semibold mb-4">
           <Award size={14} />
-          <span>Level 4 Scholar</span>
+          <span>{levelTitle}</span>
         </div>
         
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">
