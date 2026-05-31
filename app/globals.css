@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-purple: #a855f7;
+  --color-brand-blue: #3b82f6;
+  --color-brand-cyan: #06b6d4;
+  --color-brand-emerald: #10b981;
+  --color-card-bg: rgba(13, 11, 26, 0.55);
+  --color-card-border: rgba(255, 255, 255, 0.06);
+  --color-card-hover-border: rgba(168, 85, 247, 0.3);
+}
+
+:root {
+  --background: #030014;
+  --foreground: #f4f4f5;
+}
+
+body {
+  background-color: var(--background);
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(120, 119, 198, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 45%);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #030014;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Custom glow animation keyframes */
+@keyframes border-glow {
+  0%, 100% {
+    border-color: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0);
+  }
+  50% {
+    border-color: rgba(168, 85, 247, 0.35);
+    box-shadow: 0 0 12px 1px rgba(168, 85, 247, 0.1);
+  }
+}
+
+.animate-glow {
+  animation: border-glow 4s infinite ease-in-out;
+}
