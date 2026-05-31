@@ -1,17 +1,12 @@
--- SQL script to set up database tables, RLS policies, and triggers in Supabase.
--- Run this script in the Supabase SQL Editor.
-
--- ==========================================
 -- 1. Drop existing tables if they exist
--- ==========================================
+
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 DROP FUNCTION IF EXISTS public.handle_new_user();
 DROP TABLE IF EXISTS public.courses CASCADE;
 DROP TABLE IF EXISTS public.profiles CASCADE;
 
--- ==========================================
+
 -- 2. Create Profiles Table (Linked to auth.users)
--- ==========================================
 CREATE TABLE public.profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
     full_name TEXT NOT NULL,
@@ -35,9 +30,8 @@ CREATE POLICY "Allow users to update their own profile"
 ON public.profiles FOR UPDATE 
 USING (auth.uid() = id);
 
--- ==========================================
 -- 3. Create Courses Table
--- ==========================================
+
 CREATE TABLE public.courses (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -63,9 +57,8 @@ CREATE POLICY "Allow users to update their own courses"
 ON public.courses FOR UPDATE 
 USING (auth.uid() = user_id);
 
--- ==========================================
 -- 4. Create Trigger to Auto-Provision Profile & Courses on Sign Up
--- ==========================================
+
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
